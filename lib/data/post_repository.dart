@@ -7,24 +7,24 @@ import 'dart:convert';
 
 class PostRepo{
 
-static Future<List<Post>> getposts() async{
+ static Future<List<Post>> getposts() async{
+
+  List<Post> posts=[];
 
 
   try{
     var response=await http.get(Uri.https('jsonplaceholder.typicode.com', '/posts'));
 
-    if(response.statusCode==200){
-      
-      Iterable<dynamic>data =jsonDecode(response.body);
-
-      return data.map((e)=>Post(id: e['id'], title: e['title'], body: e['body'])).toList();
-
-
-
-    }
-    else{
-      throw Exception('Failed to fetch posts');
-    }
+      List result=jsonDecode(response.body);
+        
+        for(int i =0; i<result.length;i++){
+          
+          Post post=Post.fromMap(result[i] as Map<String, dynamic>);
+          posts.add(post);
+        }
+     
+      return posts;
+     
   }
   catch(e){
 
